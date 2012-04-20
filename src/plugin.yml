@@ -1,0 +1,7 @@
+name: PotionProtect
+main: net.meepcraft.alexdgr8r.potionprotect.Main
+description: Meepcraft players use potions to protect their land
+author: AlexDGr8r
+website: http://meepcraft.net/
+version: 1.0
+depend: [WorldEdit, WorldGuard]
