@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.Potion;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -14,10 +15,12 @@ public class Main extends JavaPlugin {
 	
 	public static WorldEditPlugin worldEdit;
 	public static WorldGuardPlugin worldGuard;
+	public static Potion potion = Potion.fromDamage(16430);
 	
 	public void onEnable() {
 		log = this.getLogger();
 		log_info("Enabling...");
+		
 		//Hook to WorldEdit
 		worldEdit = this.getWorldEdit();
 		if (worldEdit == null) {
@@ -34,6 +37,7 @@ public class Main extends JavaPlugin {
 		} else {
 			log_info(worldGuard.getName() + " Successfully hooked!");
 		}
+		
 		log_info("Enabled!");
 	}
 	
