@@ -38,6 +38,8 @@ public class Main extends JavaPlugin {
 			log_info(worldGuard.getName() + " Successfully hooked!");
 		}
 		
+		
+		
 		log_info("Enabled!");
 	}
 	
