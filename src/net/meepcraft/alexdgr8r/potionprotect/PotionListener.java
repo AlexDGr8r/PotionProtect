@@ -3,6 +3,8 @@ package net.meepcraft.alexdgr8r.potionprotect;
 import java.util.Collection;
 
 import org.bukkit.ChatColor;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.EventHandler;
@@ -43,7 +45,9 @@ public class PotionListener implements Listener {
 		
 		// Create Region
 		String regionName = player.getName().toLowerCase() + getUniqueID(player, getRegionManager(potionEntity));
-		ProtectedCuboidRegion region = new ProtectedCuboidRegion(regionName, getPos1(potionEntity, proPot), getPos2(potionEntity, proPot));
+		BlockVector pos1 = getPos1(potionEntity, proPot);
+		BlockVector pos2 = getPos2(potionEntity, proPot);
+		ProtectedCuboidRegion region = new ProtectedCuboidRegion(regionName, pos1, pos2);
 		region.setOwners(getDefaultDomain(player));
 		if (getRegionManager(potionEntity).overlapsUnownedRegion(region, getLocalPlayer(player))) {
 			player.sendMessage(ChatColor.RED + "There is already an area being protected here or nearby!");
@@ -51,10 +55,28 @@ public class PotionListener implements Listener {
 			event.setCancelled(true);
 		} else {
 			getRegionManager(potionEntity).addRegion(region);
+			
+			// Add fence border
+			int y = potionEntity.getLocation().getBlockY() + 1;
+			int lowX = pos1.getBlockX();
+			int highX = pos2.getBlockX();
+			int lowZ = pos1.getBlockZ();
+			int highZ = pos1.getBlockZ();
+			World world = potionEntity.getLocation().getWorld();
+			for (int x = lowX; x <= highX; x++) {
+				Block b1 = world.getBlockAt(x, y, lowZ);
+				Block b2 = world.getBlockAt(x, y, highZ);
+				if (b1.getTypeId() == 0) b1.setTypeId(85);
+				if (b2.getTypeId() == 0) b2.setTypeId(85);
+			}
+			for (int z = lowZ; z <= highZ; z++) {
+				Block b1 = world.getBlockAt(lowX, y, z);
+				Block b2 = world.getBlockAt(highX, y, z);
+				if (b1.getTypeId() == 0) b1.setTypeId(85);
+				if (b2.getTypeId() == 0) b2.setTypeId(85);
+			}
+			
 			player.sendMessage(ChatColor.GREEN + "Your land is now protected!");
-			
-			// TODO Add fence border
-			
 		}
 	}
 	
