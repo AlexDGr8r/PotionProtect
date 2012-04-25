@@ -1,3 +1,5 @@
+package net.meepcraft.alexdgr8r.potionprotect;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -78,11 +80,10 @@ public class Main extends JavaPlugin {
 		// Load potions with defaults
 		for (int i = 0; i < potionIDs.size(); i++) {
 			Potion potion = Potion.fromDamage(potionIDs.get(i));
-			static int h = config.getInt("Potions." + potionIDs.get(i) + ".Height", 256);
-			static int w = config.getInt("Potions." + potionIDs.get(i) + ".Width", 10);
-			static int l = config.getInt("Potions." + potionIDs.get(i) + ".Length", 10);
-			static int value = 1
-			static String perm = config.getString("Potions." + potionIDs.get(i) + ".Permission", "potion." + potionIDs.get(i));
+			int h = config.getInt("Potions." + potionIDs.get(i) + ".Height", 256);
+			int w = config.getInt("Potions." + potionIDs.get(i) + ".Width", 10);
+			int l = config.getInt("Potions." + potionIDs.get(i) + ".Length", 10);
+			String perm = config.getString("Potions." + potionIDs.get(i) + ".Permission", "potion." + potionIDs.get(i));
 			protectPotions.add(new ProtectPotion(potion.getEffects(), l, w, h, potionIDs.get(i), perm));
 		
 		}
@@ -98,64 +99,7 @@ public class Main extends JavaPlugin {
 			config.set("Potions." + potion.damageID + ".Permission", potion.permission);
 		}
 		this.saveConfig();
-		
-		public WorldGuardPlugin checkTaken() extends getWorldGuard()  //Thought I would start on this since I haven't done anything today.
-		{ 
-			if(potion.splash()) {
-				player.canbuild(player.getLocation().getBlock().getRelative(h, w, l));
-			} 
-			else
-			{
-				if(cmd.getName().equalsIgnoreCase("tnt")) 
-				{
-					if( ? perm : value) { //I think that's the correct way to use a Ternary Operator, not sure.
-						set.allows(DefaultFlag.TNT);
-						
-						return true;
-					}
-					return false;
-                                        }
-					else 
-					{
-						if(cmd.getName().equalsIgnoreCase("tntoff")) {
-							set.disables(DefaultFlag.TNT); //Not sure if Disable is a method.
-							
-							return true;
-						}
-						return false;
-					       }
-						else
-						    {
-							if(cmd.getName().equalsIgnoreCase("pvp")) {
-								set.allows(DefaultFlag.PVP);
-								
-								return true;
-								
-							}
-							
-							return false;
-						       }
-							else 
-							    {
-								if(cmd.getname().equalsIfnoreCase("pvpoff")) {
-									set.disables(DefaultFlag.PVP); //Not Sure about this, kind of just fooling around.
-									
-									return true;
-								}
-							
-							return false;
-							
-					    		}	//Tried to fix some Bracket Alignment			
-								
-								
-							}
-						}
-					}
-				}
-				
-			}
-			
-   		}
+
 	}
 
 }
