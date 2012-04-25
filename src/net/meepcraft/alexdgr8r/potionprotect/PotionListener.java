@@ -22,6 +22,12 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 
 public class PotionListener implements Listener {
 	
+	private Main plugin;
+	
+	public PotionListener(Main instance) {
+		plugin = instance;
+	}
+	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void potionSplash(PotionSplashEvent event) {
 		Collection<PotionEffect> effects = event.getPotion().getEffects();
@@ -38,6 +44,12 @@ public class PotionListener implements Listener {
 		Player player = (Player)potionEntity.getShooter(); // We'll just cast this for now
 		if (!player.hasPermission(proPot.permission)) {
 			player.sendMessage(ChatColor.RED + "You do not have permission to protect land with this potion.");
+			player.getInventory().addItem(new ItemStack(373, 1, (short)proPot.damageID));
+			event.setCancelled(true);
+			return;
+		}
+		if (plugin.getOwnedPlots(player) >= getMaxPlots(player)) {
+			player.sendMessage(ChatColor.RED + "You own too many plots. ");
 			player.getInventory().addItem(new ItemStack(373, 1, (short)proPot.damageID));
 			event.setCancelled(true);
 			return;
@@ -95,9 +107,6 @@ public class PotionListener implements Listener {
 	}
 	
 	private int getUniqueID(Player player, RegionManager manager) {
-		
-		// TODO Check for max number of plots
-		
 		String playerName = player.getName().toLowerCase();
 		int biggest = 1;
 		for (String regionName : manager.getRegions().keySet()) {
@@ -148,6 +157,18 @@ public class PotionListener implements Listener {
 		return new BlockVector(entity.getLocation().getBlockX() + radiusX,
 				proPot.getMaxHeight(entity.getLocation().getBlockY()),
 				entity.getLocation().getBlockZ() + radiusZ);
+	}
+	
+	private int getMaxPlots(Player player) {
+		int maxPlots = 0;
+		for (String s : Main.plotNumberPerms.keySet()) {
+			if (player.hasPermission(s)) {
+				if (Main.plotNumberPerms.get(s) >= maxPlots) {
+					maxPlots = Main.plotNumberPerms.get(s);
+				}
+			}
+		}
+		return maxPlots;
 	}
 
 }
