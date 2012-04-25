@@ -1,5 +1,7 @@
 package net.meepcraft.alexdgr8r.potionprotect;
 
+/*Meepcraft Open Source PotionProtect Plugin, Copyright 2012*/
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
