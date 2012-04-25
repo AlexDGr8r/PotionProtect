@@ -17,6 +17,7 @@ import org.bukkit.potion.PotionEffect;
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.domains.DefaultDomain;
+import com.sk89q.worldguard.protection.databases.ProtectionDatabaseException;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 
@@ -48,7 +49,7 @@ public class PotionListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		if (plugin.getOwnedPlots(player) >= getMaxPlots(player)) {
+		if (plugin.getOwnedPlots(player) >= getMaxPlots(player) && !player.isOp()) {
 			player.sendMessage(ChatColor.RED + "You own too many plots. ");
 			player.getInventory().addItem(new ItemStack(373, 1, (short)proPot.damageID));
 			event.setCancelled(true);
@@ -67,29 +68,47 @@ public class PotionListener implements Listener {
 			event.setCancelled(true);
 		} else {
 			getRegionManager(potionEntity).addRegion(region);
+			try {
+				getRegionManager(potionEntity).save();
+			} catch (ProtectionDatabaseException e) {
+				e.printStackTrace();
+			}
 			
 			// Add fence border
-			int y = potionEntity.getLocation().getBlockY() + 1;
+			int y = potionEntity.getLocation().getBlockY();
 			int lowX = pos1.getBlockX();
 			int highX = pos2.getBlockX();
 			int lowZ = pos1.getBlockZ();
-			int highZ = pos1.getBlockZ();
+			int highZ = pos2.getBlockZ();
 			World world = potionEntity.getLocation().getWorld();
 			for (int x = lowX; x <= highX; x++) {
 				Block b1 = world.getBlockAt(x, y, lowZ);
 				Block b2 = world.getBlockAt(x, y, highZ);
-				if (b1.getTypeId() == 0) b1.setTypeId(85);
-				if (b2.getTypeId() == 0) b2.setTypeId(85);
+				if (isReplaceableBlock(b1.getTypeId())) b1.setTypeId(85);
+				if (isReplaceableBlock(b2.getTypeId())) b2.setTypeId(85);
 			}
 			for (int z = lowZ; z <= highZ; z++) {
 				Block b1 = world.getBlockAt(lowX, y, z);
 				Block b2 = world.getBlockAt(highX, y, z);
-				if (b1.getTypeId() == 0) b1.setTypeId(85);
-				if (b2.getTypeId() == 0) b2.setTypeId(85);
+				if (isReplaceableBlock(b1.getTypeId())) b1.setTypeId(85);
+				if (isReplaceableBlock(b2.getTypeId())) b2.setTypeId(85);
 			}
 			
 			player.sendMessage(ChatColor.GREEN + "Your land is now protected!");
 		}
+	}
+	
+	private boolean isReplaceableBlock(int id) {
+		switch (id) {
+		case 0:
+		case 31:
+		case 32:
+		case 51:
+		case 78:
+		case 106:
+			return true;
+		}
+		return false;
 	}
 	
 	private RegionManager getRegionManager(ThrownPotion entity) {

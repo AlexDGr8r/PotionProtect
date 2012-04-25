@@ -1,7 +1,12 @@
 PotionIDs:
-  - 16481
-  - 16482
-  - 16489
+- 16481
+- 16482
+- 16489
+# Example
+# PlotsByPermission:
+#   Default: 10
+#   Donator: 20
+#   DonatorPlus: 30
 # Add permission like so 'potion.Default' for Default.
 PlotsByPermission:
   Default: 10

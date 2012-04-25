@@ -103,11 +103,17 @@ public class Main extends JavaPlugin {
 	}
 	
 	public void saveConfiguration() {
+		List<Integer> potionIDs = new ArrayList<Integer>();
 		for (ProtectPotion potion : protectPotions) {
 			config.set("Potions." + potion.damageID + ".Height", potion.getHeight());
 			config.set("Potions." + potion.damageID + ".Width", potion.width);
 			config.set("Potions." + potion.damageID + ".Length", potion.length);
 			config.set("Potions." + potion.damageID + ".Permission", potion.permission);
+			potionIDs.add(potion.damageID);
+		}
+		config.set("PotionIDs", potionIDs);
+		for (String s : plotNumberPerms.keySet()) {
+			config.set("PlotsByPermission." + s.replace("potion.", ""), plotNumberPerms.get(s));
 		}
 		this.saveConfig();
 	}
