@@ -106,7 +106,7 @@ public class Main extends JavaPlugin {
 		public WorldGuardPlugin checkTaken()  //Thought I would start on this since I haven't done anything today.
 		{ 
 			if(potion.splash()) {
-				player.canbuild(player.getLocation().getBlock().getRelative(h, w, l)););
+				player.canbuild(player.getLocation().getBlock().getRelative(h, w, l));
 			} 
 			else
 			{
