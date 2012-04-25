@@ -114,21 +114,44 @@ public class Main extends JavaPlugin {
 				{
 					if( ? perm : value) { //I think that's the correct way to use a Ternary Operator, not sure.
 						set.allows(DefaultFlag.TNT);
+						
+						return true;
 					}
-					else {
+					return false;
+                                        }
+					else 
+					{
 						if(cmd.getName().equalsIgnoreCase("tntoff")) {
 							set.disables(DefaultFlag.TNT); //Not sure if Disable is a method.
 							
+							return true;
 						}
-						else{
+						return false;
+					       }
+						else
+						    {
 							if(cmd.getName().equalsIgnoreCase("pvp")) {
 								set.allows(DefaultFlag.PVP);
 								
+								return true;
+								
 							}
-							else {
+							
+							return false;
+						       }
+							else 
+							    {
 								if(cmd.getname().equalsIfnoreCase("pvpoff")) {
 									set.disables(DefaultFlag.PVP); //Not Sure about this, kind of just fooling around.
+									
+									return true;
 								}
+							
+							return false;
+							
+					    		}	//Tried to fix some Bracket Alignment			
+								
+								
 							}
 						}
 					}
@@ -136,7 +159,7 @@ public class Main extends JavaPlugin {
 				
 			}
 			
-		}
+   		}
 	}
 
 }
